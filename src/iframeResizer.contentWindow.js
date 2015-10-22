@@ -148,6 +148,14 @@
 	}
 
 
+	function ensureDocumentBodyReady(cb) {
+		if (!document.body) {
+			setTimeout(function() { ensureDocumentBodyReady(cb) }, 32);
+			return;
+		}
+		cb();
+	}
+
 	function init(){
 		readDataFromParent();
 		log('Initialising iFrame ('+location.href+')');
@@ -952,7 +960,7 @@
 			initMsg = event.data;
 			target  = event.source;
 
-			init();
+			ensureDocumentBodyReady(init);
 			firstRun = false;
 			setTimeout(function(){ initLock = false;},eventCancelTimer);
 		}
